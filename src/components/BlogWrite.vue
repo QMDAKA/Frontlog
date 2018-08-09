@@ -29,8 +29,8 @@
         <label>Body:</label>
         <froala :tag="'textarea'" :config="config" v-model="post.body" id="body"></froala>
       </div>
-      <button class="btn btn-success btn-lg pull-right " v-on:click="onUpload()">Finish</button>
     </form>
+    <button class="btn btn-success btn-lg pull-right " v-on:click="onUpload()">Finish</button>
   </div>
   </body>
   </html>
