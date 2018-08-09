@@ -10,7 +10,7 @@
       <article class="post">
         <header>
           <div class="title">
-            <h2><a href="#">Magna sed adipiscing</a></h2>
+            <h2><a href="#">{{title}}</a></h2>
             <p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
           </div>
           <div class="meta">
@@ -18,9 +18,8 @@
             <a href="#" class="author"><span class="name">Jane Doe</span><img src="../images/avatar.jpg" alt="" /></a>
           </div>
         </header>
-        <span class="image featured"><img src="../images/pic01.jpg" alt="" /></span>
-        <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue ullam corper. Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-        <p>Nunc quis dui scelerisque, scelerisque urna ut, dapibus orci. Sed vitae condimentum lectus, ut imperdiet quam. Maecenas in justo ut nulla aliquam sodales vel at ligula. Sed blandit diam odio, sed fringilla lectus molestie sit amet. Praesent eu tortor viverra lorem mattis pulvinar feugiat in turpis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce ullamcorper tellus sit amet mattis dignissim. Phasellus ut metus ligula. Curabitur nec leo turpis. Ut gravida purus quis erat pretium, sed pellentesque massa elementum. Fusce vestibulum porta augue, at mattis justo. Integer sed sapien fringilla, dapibus risus id, faucibus ante. Pellentesque mattis nunc sit amet tortor pellentesque, non placerat neque viverra. </p>
+        <span class="image featured"><img :src='image' alt="" /></span>
+        <froalaView v-model="body"></froalaView>
         <footer>
           <ul class="stats">
             <li><a href="#">General</a></li>
@@ -52,25 +51,41 @@
 <script>
 import axios from 'axios'
 import BlogNav from './BlogNav'
+import VueFroala from 'vue-froala-wysiwyg';
+const constant = require('../../config/constant')
+let serverHost = constant.serverHost
 export default {
   components: {BlogNav},
   name: 'blog',
   data () {
     return {
-      results: []
+      title: null,
+      image: null,
+      body: null
     }
   },
   async mounted () {
     try {
-      let response = await axios.get('https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fvnexpress.net%2Frss%2Fthoi-su.rss')
-      this.results = response.data.items
-      console.log(this.results[0].link)
+      console.log(this.$route.params.id);
+      let result = await axios(
+        {
+          method: 'GET',
+          url: serverHost+"/posts/"+this.$route.params.id,
+          headers: {
+            'Authorization': 'Bearer ' + this.$localStorage.get('token'),
+          }
+        });
+      console.log(result);
+      if(result.data.success){
+        this.image = result.data.payload.image
+        this.title = result.data.payload.title
+        this.body = result.data.payload.body
+      }
     } catch (e) {
       this.errors.push(e)
     }
   }
 }
-
 </script>
 
 <style scoped>

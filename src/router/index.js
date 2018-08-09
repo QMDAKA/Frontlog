@@ -21,7 +21,7 @@ export default new Router({
       component: Test
     },
     {
-      path: '/blog',
+      path: '/blog/:id',
       name: 'blog',
       component: Blog
     },

@@ -67,7 +67,6 @@
 
       </div>
     </div>
-
     <!-- Menu -->
     <section id="menu">
 
@@ -124,9 +123,7 @@
               'Authorization': 'Bearer ' + this.$localStorage.get('token')
             }
           });
-          console.log(result.data.payload[0].username)
           this.$data.user = result.data.payload[0];
-          console.log(this.$data.user)
           this.$localStorage.set('user', JSON.stringify(result.data.payload[0]))
         }
       }else {
