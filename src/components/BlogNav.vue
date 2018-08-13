@@ -3,7 +3,7 @@
   <div id="nav">
     <header id="header">
       <h1>
-        <router-link to="/blog-home">Home</router-link>
+        <a href="/blog-home">Home</a>
       </h1>
       <nav class="links">
         <ul>
@@ -35,7 +35,7 @@
                 <a class="dropdown-item"><i class="fa fa-user fa-fw"></i>Profile</a>
                 <a class="dropdown-item"><i class="fa fa-pencil fa-fw"></i>Edit</a>
                 <a class="dropdown-item"><i class="fa fa-pencil fa-fw"></i>Edit</a>
-                <a class="dropdown-item"><i class="fa fa-sign-out fa-fw"></i>Logout</a>
+                <a class="dropdown-item" :href="logout" v-on:click="removeStorage"><i class="fa fa-sign-out fa-fw"></i>Logout</a>
               </div>
             </div>
           </li>
@@ -112,6 +112,11 @@
       showModal: function () {
         console.log('show modal')
         $('#login-modal').modal('show');
+      },
+      removeStorage: function () {
+        this.$localStorage.removeItem('token');
+        this.$localStorage.removeItem('user');
+
       }
     },
     async created() {

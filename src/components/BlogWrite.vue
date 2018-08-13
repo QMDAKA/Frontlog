@@ -14,9 +14,9 @@
         <input class="form-control" id="title" required v-model="post.title">
       </div>
       <div v-for="(tag,index) in post.tags">
-        <div class="form-group form-inline">
+        <div class="form-group form-inline" >
           <label class="control-label">Tag:</label>
-          <input class="form-control" style="width: 200px" id="tag" v-bind:value="tag" required>
+          <input class="form-control" style="width: 200px" :id="'tag'+index" v-model="tags[index]" required>
           <i class="fa fa-plus-circle fa-2x" aria-hidden="true" v-on:click="addNewInput"></i>
           <i class="fa fa-window-close fa-2x" aria-hidden="true" v-on:click="deleteInput(index)"></i>
         </div>
@@ -29,8 +29,8 @@
         <label>Body:</label>
         <froala :tag="'textarea'" :config="config" v-model="post.body" id="body"></froala>
       </div>
+      <button class="btn btn-success btn-lg pull-right " type="button" v-on:click="onUpload()">Finish</button>
     </form>
-    <button class="btn btn-success btn-lg pull-right " v-on:click="onUpload()">Finish</button>
   </div>
   </body>
   </html>
@@ -40,6 +40,7 @@
   import Form from "bootstrap-vue/es/components/form/form";
   import VueFroala from 'vue-froala-wysiwyg';
   import BlogNav from './BlogNav'
+  import $ from 'jquery'
   const FormData = require('form-data');
   const axios = require('axios');
   const constant = require('../../config/constant')
@@ -87,6 +88,12 @@
     methods: {
       onFileSelected(event) {
         this.post.image = event.target.files[0]
+      },
+      async changeTag(index){
+        console.log(this.tags)
+        // let tagName = '#tag'+index
+        // console.log($(tagName).val());
+        // this.tags[index] = $(tagName).val()
       },
       async onUpload() {
         try {

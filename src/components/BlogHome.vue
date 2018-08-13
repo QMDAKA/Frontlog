@@ -19,98 +19,54 @@
     <!-- Main -->
     <div id="main">
       <!-- Post -->
-      <article class="post">
-        <header>
-          <div class="title">
-            <h2>
-              <router-link to="/blog">MAGNA SED ADIPISCING</router-link>
-            </h2>
-            <p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
-          </div>
-          <div class="meta">
-            <time class="published" datetime="2015-11-01">November 1, 2015</time>
-            <a href="#" class="author"><span class="name">Jane Doe</span><img src="../images/avatar.jpg" alt=""/></a>
-          </div>
-        </header>
-        <a class="image featured">
-          <router-link to="/blog"></router-link>
-          <img src="../images/pic01.jpg" alt=""/>
-        </a>
-        <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod
-          placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue
-          ullam corper. Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae,
-          ultricies congue gravida diam non fringilla.</p>
-        <footer>
-          <ul class="actions">
-            <li><a href="#" class="button big">Continue Reading</a></li>
-          </ul>
-          <ul class="stats">
-            <li><a href="#">General</a></li>
-            <li><a href="#" class="icon fa-heart">28</a></li>
-            <li><a href="#" class="icon fa-comment">128</a></li>
-          </ul>
-        </footer>
-      </article>
-
-      <!-- Post -->
-      <article class="post">
-        <header>
-          <div class="title">
-            <h2><a href="#">Ultricies sed magna euismod enim vitae gravida</a></h2>
-            <p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
-          </div>
-          <div class="meta">
-            <time class="published" datetime="2015-10-25">October 25, 2015</time>
-            <a href="#" class="author"><span class="name">Jane Doe</span><img src="../images/avatar.jpg" alt=""/></a>
-          </div>
-        </header>
-        <a href="#" class="image featured"><img src="../images/pic02.jpg" alt=""/></a>
-        <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod
-          placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue
-          ullam corper.</p>
-        <footer>
-          <ul class="actions">
-            <li><a href="#" class="button big">Continue Reading</a></li>
-          </ul>
-          <ul class="stats">
-            <li><a href="#">General</a></li>
-            <li><a href="#" class="icon fa-heart">28</a></li>
-            <li><a href="#" class="icon fa-comment">128</a></li>
-          </ul>
-        </footer>
-      </article>
-
-      <!-- Post -->
-      <article class="post">
-        <header>
-          <div class="title">
-            <h2><a href="#">Euismod et accumsan</a></h2>
-            <p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
-          </div>
-          <div class="meta">
-            <time class="published" datetime="2015-10-22">October 22, 2015</time>
-            <a href="#" class="author"><span class="name">Jane Doe</span><img src="../images/avatar.jpg" alt=""/></a>
-          </div>
-        </header>
-        <a href="#" class="image featured"><img src="../images/pic03.jpg" alt=""/></a>
-        <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod
-          placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue
-          ullam corper. Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae,
-          ultricies congue gravida diam non fringilla. Cras vehicula tellus eu ligula viverra, ac fringilla turpis
-          suscipit. Quisque vestibulum rhoncus ligula.</p>
-        <footer>
-          <ul class="actions">
-            <li><a href="#" class="button big">Continue Reading</a></li>
-          </ul>
-          <ul class="stats">
-            <li><a href="#">General</a></li>
-            <li><a href="#" class="icon fa-heart">28</a></li>
-            <li><a href="#" class="icon fa-comment">128</a></li>
-          </ul>
-        </footer>
-      </article>
+      <div class="main-post" v-for="(post,index) in payload.posts">
+        <article class="post">
+          <header>
+            <div class="title">
+              <h2>
+                <router-link :to="'/blog/'+post.id">{{post.title}}</router-link>
+              </h2>
+              <p class="show-tags" v-for="(tag,index) in post.tags" style="display: inline">
+                #{{tag.name}}
+              </p>
+            </div>
+            <div class="meta">
+              <time class="published" :datetime="beautyDate(post.createdAt)">{{post.createdAt}}</time>
+              <a :href="'/blog-home?idUser='+post.users[0].id" class="author"><span class="name">{{post.users[0].username}}</span><img
+                :src="post.users[0].thumbnail" alt=""/></a>
+            </div>
+          </header>
+          <a class="image featured">
+            <img :src="post.image" alt="" class="img-fluid"/>
+          </a>
+          <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod
+            placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue
+            ullam corper. Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae,
+            ultricies congue gravida diam non fringilla.</p>
+          <footer>
+            <ul class="actions">
+              <li>
+                <router-link :to="'/blog/'+post.id" class="button big">Continue Reading</router-link>
+              </li>
+            </ul>
+            <ul class="stats">
+              <li><a href="#">General</a></li>
+              <li><a href="#" class="icon fa-heart">28</a></li>
+              <li><a href="#" class="icon fa-comment">128</a></li>
+            </ul>
+          </footer>
+        </article>
+      </div>
+      <paginate
+        v-model="page"
+        :pageCount="payload.pageSize"
+        :click-handler="loadposts"
+        :margin-pages="2"
+        :prevText="'Prev'"
+        :nextText="'Next'"
+        :containerClass="'pagination'">
+      </paginate>
     </div>
-
     <!-- Sidebar -->
     <section id="sidebar">
 
@@ -171,24 +127,17 @@
 
       <!-- Posts List -->
       <section>
-        <h3><i class="fa fa-tag" aria-hidden="true"></i>Tag</h3>
-        <button type="button" class="btn btn-secondary">Primary <span class="badge">7</span></button>
-        <button type="button" class="btn btn-secondary">Primary <span class="badge">7</span></button>
-        <button type="button" class="btn btn-secondary">Primary <span class="badge">7</span></button>
-        <button type="button" class="btn btn-secondary">Primary <span class="badge">7</span></button>
-        <button type="button" class="btn btn-secondary">Primary <span class="badge">7</span></button>
-        <button type="button" class="btn btn-secondary">Primary <span class="badge">7</span></button>
-        <button type="button" class="btn btn-secondary">Primary <span class="badge">7</span></button>
-        <button type="button" class="btn btn-secondary">Primary <span class="badge">7</span></button>
-        <button type="button" class="btn btn-secondary">Primary <span class="badge">7</span></button>
-
+        <h3><i class="fa fa-tag" aria-hidden="true"></i>Tags</h3>
+        <div class="list-tags" v-for="(tag,index) in tags" style="display: inline">
+          <button type="button" class="btn btn-secondary"><a :href="'/blog-home?tag='+tag.name">{{tag.name}} <span class="badge">{{tag.count}}</span></a></button>
+        </div>
       </section>
 
       <!-- About -->
       <section class="blurb">
         <h2>About</h2>
-        <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod amet
-          placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at phasellus sed ultricies.</p>
+        <p> To see the world, things dangerous to come to, to see behind walls, draw closer, to find each other, and to
+          feel. That is the purpose of life.</p>
         <ul class="actions">
           <li><a href="#" class="button">Learn More</a></li>
         </ul>
@@ -217,6 +166,11 @@
   import skel from 'skel-framework-npm'
   import $ from 'jquery'
   import BlogNav from './BlogNav'
+  import Paginate from 'vuejs-paginate'
+
+  const constant = require('../../config/constant')
+  const serverHost = constant.serverHost
+  const axios = require('axios');
   skel.breakpoints({
     xlarge: '(max-width: 1680px)',
     large: '(max-width: 1280px)',
@@ -225,8 +179,90 @@
     xsmall: '(max-width: 480px)'
   });
   export default {
-    components: {BlogNav},
+    components: {BlogNav, Paginate},
     name: 'blog-home',
+    data() {
+      return {
+        payload: '',
+        page: 1,
+        tags: []
+      }
+    },
+    methods: {
+      async beautyDate(date) {
+        let ms = Date.parse(date);
+        let now = new Date(ms);
+        return Promise.resolve(now.getDate() + "/" + now.getMonth() + "/" + now.getFullYear())
+      },
+      async loadposts(query) {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+        let result;
+        if(_.isUndefined(query.idUser) && _.isUndefined(query.tag)) {
+          result = await axios(
+            {
+              method: 'GET',
+              url: serverHost + "/posts",
+              headers: {
+                'Authorization': 'Bearer ' + this.$localStorage.get('token'),
+              },
+              params: {
+                page: this.page
+              }
+            });
+        }else if(!_.isUndefined(query.idUser)){
+          console.log('load post with id user')
+          result = await axios(
+            {
+              method: 'GET',
+              url: serverHost + "/posts",
+              headers: {
+                'Authorization': 'Bearer ' + this.$localStorage.get('token'),
+              },
+              params: {
+                idUser: query.idUser,
+                page: this.page
+              }
+            });
+        }else if(!_.isUndefined(query.tag)){
+          console.log('load post with tag')
+          result = await axios(
+            {
+              method: 'GET',
+              url: serverHost + "/posts",
+              headers: {
+                'Authorization': 'Bearer ' + this.$localStorage.get('token'),
+              },
+              params: {
+                tag: query.tag,
+                page: this.page
+              }
+            });
+        }
+        if (result.data.success) {
+          this.payload = result.data.payload
+          for (let i = 0; i < this.payload.posts.length; i++) {
+            this.payload.posts[i].createdAt = await this.beautyDate(this.payload.posts[i].createdAt)
+          }
+        }
+        console.log(this.payload)
+      },
+      async loadtags() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+        let result = await axios(
+          {
+            method: 'GET',
+            url: serverHost + "/tags",
+            headers: {
+              'Authorization': 'Bearer ' + this.$localStorage.get('token'),
+            }
+          });
+        if (result.data.success) {
+          this.tags = result.data.payload
+        }
+      },
+    },
     beforeMount() {
       this.$nextTick(() => {
         // intro
@@ -234,13 +270,21 @@
         skel
           .on('+large', function () {
             console.log('zz')
-             $('#intro').prependTo('#main')
+            $('#intro').prependTo('#main')
           })
           .on('-large', function () {
             console.log('aa')
             $('#intro').prependTo('#sidebar')
           });
       });
+    },
+    async mounted() {
+      try {
+        await this.loadposts(this.$route.query)
+        await this.loadtags()
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 </script>

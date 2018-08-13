@@ -14,10 +14,12 @@ import jQuery from 'jquery'
 import 'bootstrap/dist/css/bootstrap.css'
 import VueFroala from 'vue-froala-wysiwyg'
 import VueLocalStorage from 'vue-localstorage'
+import Paginate from 'vuejs-paginate'
 global.jQuery = jQuery
 global.$ = jQuery
 let Bootstrap = require('bootstrap')
 Vue.config.productionTip = false
+Vue.component('paginate', Paginate)
 Vue.use(VueFroala)
 Vue.use(VueLocalStorage)
 /* eslint-disable no-new */
