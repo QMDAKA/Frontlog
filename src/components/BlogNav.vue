@@ -7,7 +7,7 @@
       </h1>
       <nav class="links">
         <ul>
-          <li>
+          <li v-if="checkUser()">
             <router-link to="/write">Write Post</router-link>
           </li>
           <li><a href="#">About</a></li>
@@ -114,8 +114,8 @@
         $('#login-modal').modal('show');
       },
       removeStorage: function () {
-        this.$localStorage.removeItem('token');
-        this.$localStorage.removeItem('user');
+        this.$localStorage.remove('token');
+        this.$localStorage.remove('user');
 
       }
     },

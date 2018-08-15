@@ -216,9 +216,6 @@
             {
               method: 'GET',
               url: serverHost + "/posts",
-              headers: {
-                'Authorization': 'Bearer ' + this.$localStorage.get('token'),
-              },
               params: {
                 idUser: query.idUser,
                 page: this.page
@@ -230,9 +227,6 @@
             {
               method: 'GET',
               url: serverHost + "/posts",
-              headers: {
-                'Authorization': 'Bearer ' + this.$localStorage.get('token'),
-              },
               params: {
                 tag: query.tag,
                 page: this.page

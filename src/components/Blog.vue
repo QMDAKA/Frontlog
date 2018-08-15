@@ -73,10 +73,7 @@ export default {
       let result = await axios(
         {
           method: 'GET',
-          url: serverHost+"/posts/"+this.$route.params.id,
-          headers: {
-            'Authorization': 'Bearer ' + this.$localStorage.get('token'),
-          }
+          url: serverHost+"/posts/"+this.$route.params.id
         });
       console.log(result);
       if(result.data.success){
