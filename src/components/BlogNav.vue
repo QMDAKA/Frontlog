@@ -10,10 +10,12 @@
           <li v-if="checkUser()">
             <router-link to="/write">Write Post</router-link>
           </li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Feugiat</a></li>
-          <li><a href="#">Tempus</a></li>
-          <li><a href="#">Adipiscing</a></li>
+          <li v-if="checkUser()">
+            <router-link to="/user/favorited-post">Favorited Post</router-link>
+          </li>
+          <li><a href="#">Dev In Japorn</a></li>
+          <li><a href="#">Stories</a></li>
+          <li><a href="#">About me</a></li>
         </ul>
       </nav>
       <nav class="main">
@@ -32,9 +34,9 @@
               </a>
 
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item"><i class="fa fa-user fa-fw"></i>Profile</a>
-                <a class="dropdown-item"><i class="fa fa-pencil fa-fw"></i>Edit</a>
-                <a class="dropdown-item"><i class="fa fa-pencil fa-fw"></i>Edit</a>
+                <router-link class="dropdown-item" to="#"><i class="fa fa-user fa-fw"></i>Profile</router-link>
+                <router-link class="dropdown-item" to="/user/my-post"><i class="fa fa-file-text fa-fw"></i>Your Post</router-link>
+                <router-link class="dropdown-item" to="/user/favorited-post"><i class="fa fa-heart fa-fw"></i>Favorited Post</router-link>
                 <a class="dropdown-item" :href="logout" v-on:click="removeStorage"><i class="fa fa-sign-out fa-fw"></i>Logout</a>
               </div>
             </div>
@@ -101,16 +103,13 @@
     },
     methods: {
       checkUser: function () {
-        console.log(JSON.stringify(this.$data.user))
         if (this.$data.user != null) {
           return true;
         } else {
-          console.log('dont show');
           return false;
         }
       },
       showModal: function () {
-        console.log('show modal')
         $('#login-modal').modal('show');
       },
       removeStorage: function () {

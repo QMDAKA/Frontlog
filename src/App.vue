@@ -1,12 +1,15 @@
 <template>
   <div id="app">
+    <vue-headful title="DAKA's Log"></vue-headful>
     <router-view/>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'App'
+  import vueHeadful from 'vue-headful';
+  export default {
+    components: {vueHeadful},
+    name: 'App'
 }
 </script>
 

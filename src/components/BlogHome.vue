@@ -49,11 +49,6 @@
                 <router-link :to="'/blog/'+post.id" class="button big">Continue Reading</router-link>
               </li>
             </ul>
-            <ul class="stats">
-              <li><a href="#">General</a></li>
-              <li><a href="#" class="icon fa-heart">28</a></li>
-              <li><a href="#" class="icon fa-comment">128</a></li>
-            </ul>
           </footer>
         </article>
       </div>
@@ -70,17 +65,10 @@
     <!-- Sidebar -->
     <section id="sidebar">
 
-      <!-- Intro -->
-      <section id="intro">
-        <a href="#" class="logo"><img src="../images/logo.jpg" alt=""/></a>
-        <header>
-          <h2>Future Imperfect</h2>
-        </header>
-      </section>
-
+      <blog-intro></blog-intro>
       <!-- Mini Posts -->
       <section>
-        <h3>Most Viewed Post</h3>
+        <h3>Most Favorited Post</h3>
         <div class="mini-posts">
 
           <!-- Mini Post -->
@@ -129,7 +117,8 @@
       <section>
         <h3><i class="fa fa-tag" aria-hidden="true"></i>Tags</h3>
         <div class="list-tags" v-for="(tag,index) in tags" style="display: inline">
-          <button type="button" class="btn btn-secondary"><a :href="'/blog-home?tag='+tag.name">{{tag.name}} <span class="badge">{{tag.count}}</span></a></button>
+          <button type="button" class="btn btn-secondary"><a :href="'/blog-home?tag='+tag.name">{{tag.name}} <span
+            class="badge">{{tag.count}}</span></a></button>
         </div>
       </section>
 
@@ -166,6 +155,7 @@
   import skel from 'skel-framework-npm'
   import $ from 'jquery'
   import BlogNav from './BlogNav'
+  import BlogIntro from './BlogIntro'
   import Paginate from 'vuejs-paginate'
 
   const constant = require('../../config/constant')
@@ -179,7 +169,7 @@
     xsmall: '(max-width: 480px)'
   });
   export default {
-    components: {BlogNav, Paginate},
+    components: {BlogNav, Paginate, BlogIntro},
     name: 'blog-home',
     data() {
       return {
@@ -194,11 +184,12 @@
         let now = new Date(ms);
         return Promise.resolve(now.getDate() + "/" + now.getMonth() + "/" + now.getFullYear())
       },
-      async loadposts(query) {
+      async loadposts() {
+        let query = this.$route.query
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
         let result;
-        if(_.isUndefined(query.idUser) && _.isUndefined(query.tag)) {
+        if (_.isUndefined(query.idUser) && _.isUndefined(query.tag)) {
           result = await axios(
             {
               method: 'GET',
@@ -210,7 +201,7 @@
                 page: this.page
               }
             });
-        }else if(!_.isUndefined(query.idUser)){
+        } else if (!_.isUndefined(query.idUser)) {
           console.log('load post with id user')
           result = await axios(
             {
@@ -221,7 +212,7 @@
                 page: this.page
               }
             });
-        }else if(!_.isUndefined(query.tag)){
+        } else if (!_.isUndefined(query.tag)) {
           console.log('load post with tag')
           result = await axios(
             {
@@ -274,7 +265,7 @@
     },
     async mounted() {
       try {
-        await this.loadposts(this.$route.query)
+        await this.loadposts()
         await this.loadtags()
       } catch (e) {
         console.log(e)

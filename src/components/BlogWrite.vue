@@ -14,9 +14,9 @@
         <input class="form-control" id="title" required v-model="post.title">
       </div>
       <div v-for="(tag,index) in post.tags">
-        <div class="form-group form-inline" >
+        <div class="form-group form-inline">
           <label class="control-label">Tag:</label>
-          <input class="form-control" style="width: 200px" :id="'tag'+index" v-model="tags[index]" required>
+          <input class="form-control" style="width: 200px" :id="'tag'+index" v-model="post.tags[index]" required>
           <i class="fa fa-plus-circle fa-2x" aria-hidden="true" v-on:click="addNewInput"></i>
           <i class="fa fa-window-close fa-2x" aria-hidden="true" v-on:click="deleteInput(index)"></i>
         </div>
@@ -45,18 +45,17 @@
   const axios = require('axios');
   const constant = require('../../config/constant')
   let serverHost = constant.serverHost
-  let tags = ['Tags'];
+  let changeImage = false
   export default {
     components: {Form, BlogNav},
     name: "blog-write",
     data() {
       return {
-        tags: tags,
         post: {
           title: 'hello',
           image: null,
           body: 'Edit Your Content Here',
-          tags: tags
+          tags: ['']
         },
         postBlogUrl: serverHost + '/posts',
         config: {
@@ -80,31 +79,60 @@
             'froalaEditor.image.inserted': function (e, editor, $img, response) {
               console.log(response)
             }
-
           }
         },
       }
     },
     methods: {
       onFileSelected(event) {
-        this.post.image = event.target.files[0]
+        console.log(_.isUndefined(event.target.files[0]))
+        if (!_.isUndefined(event.target.files[0])) {
+          this.post.image = event.target.files[0]
+          changeImage = true
+        }
       },
-      async changeTag(index){
+      async changeTag(index) {
         console.log(this.tags)
-        // let tagName = '#tag'+index
-        // console.log($(tagName).val());
-        // this.tags[index] = $(tagName).val()
       },
       async onUpload() {
         try {
+          let idPost;
+          console.log(this.tags)
           const fd = new FormData();
-          if (this.post.image !== null) {
-            fd.append('image', this.post.image, this.post.image.name)
-            console.log(this.$localStorage.get('token'))
-            let result = await axios(
+          let result;
+          if (_.isUndefined(this.$route.query.idPost)) {
+            if (this.post.image !== null) {
+              fd.append('image', this.post.image, this.post.image.name)
+              console.log(this.$localStorage.get('token'))
+              result = await axios(
+                {
+                  method: 'POST',
+                  url: this.postBlogUrl,
+                  headers: {
+                    'Authorization': 'Bearer ' + this.$localStorage.get('token'),
+                    'Content-Type': 'multipart/form-data'
+                  },
+                  data: fd,
+                  params: {
+                    title: this.post.title,
+                    body: this.post.body,
+                    tags: this.post.tags,
+                  }
+                });
+              idPost = result.data.payload[0].id
+            }
+            else
+              alert('Image not found')
+          }
+          else {
+            idPost = this.$route.query.idPost
+            if (changeImage) {
+              fd.append('image', this.post.image, this.post.image.name)
+            }
+            result = await axios(
               {
-                method: 'POST',
-                url: this.postBlogUrl,
+                method: 'PUT',
+                url: this.postBlogUrl + "/" + this.$route.query.idPost,
                 headers: {
                   'Authorization': 'Bearer ' + this.$localStorage.get('token'),
                   'Content-Type': 'multipart/form-data'
@@ -114,34 +142,46 @@
                   title: this.post.title,
                   body: this.post.body,
                   tags: this.post.tags,
+                  changeImage : changeImage
                 }
               });
-            console.log(result)
-            if (result.data.success) {
-              window.location.replace('/blog/' + result.data.payload[0].id)
-            }
           }
-          else
-            alert('Image not found')
-
+          console.log(result)
+          if (result.data.success) {
+            window.location.replace('/blog/' + idPost)
+          }
         } catch (err) {
           console.log(err)
         }
       },
       addNewInput: function () {
-        this.tags.push('Tags' + Date.now())
-        console.log(this.tags)
+        this.post.tags.push('Tags' + Date.now())
       },
       deleteInput: function (index) {
-        if (this.tags.length > 1) {
-          this.tags.splice(index, 1)
-          console.log(index)
+        if (this.post.tags.length > 1) {
+          this.post.tags.splice(index, 1)
         }
       }
     },
     beforeMount() {
-      this.$nextTick(() => {
-        console.log('initialized')
+      this.$nextTick(async () => {
+        if (!_.isUndefined(this.$route.query.idPost)) {
+          let result = await axios(
+            {
+              method: 'GET',
+              url: serverHost + "/posts/" + this.$route.query.idPost
+            });
+          console.log(result)
+          if (result.data.success) {
+            this.post.title = result.data.payload.title
+            this.post.body = result.data.payload.body
+            let tick = _.map(result.data.payload.tags, 'name')
+            this.post.tags.splice(0, 1)
+            for(let i = 0; i< tick.length; i++){
+              this.post.tags.push(tick[i])
+            }
+          }
+        }
       });
     }
   }

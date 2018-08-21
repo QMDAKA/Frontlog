@@ -4,8 +4,9 @@ import HelloWorld from '@/components/HelloWorld'
 import Test from '@/components/Test'
 import Blog from '@/components/Blog'
 import BlogHome from '@/components/BlogHome'
-import Beer from '@/components/Beer'
 import BlogWrite from '@/components/BlogWrite'
+import BlogFavorited from '@/components/BlogFavorited'
+import BlogWritedByUser from '@/components/BlogWritedByUser'
 Vue.use(Router)
 
 export default new Router({
@@ -31,14 +32,19 @@ export default new Router({
       component: BlogHome
     },
     {
-      path: '/beer',
-      name: 'beer',
-      component: Beer
-    },
-    {
       path: '/write',
       name: 'blog-write',
       component: BlogWrite
+    },
+    {
+      path: '/user/favorited-post',
+      name: 'blog-favorited',
+      component: BlogFavorited
+    },
+    {
+      path: '/user/my-post',
+      name: 'blog-writed-by-user',
+      component: BlogWritedByUser
     }
   ],
   mode: 'history'
