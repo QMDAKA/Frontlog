@@ -27,10 +27,7 @@
                 :src="post.users[0].thumbnail" alt=""/></a>
             </div>
           </header>
-          <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod
-            placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue
-            ullam corper. Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae,
-            ultricies congue gravida diam non fringilla.</p>
+          <p>{{post.abstract}}</p>
           <footer>
             <ul class="actions">
               <li>
@@ -40,15 +37,15 @@
           </footer>
         </article>
       </div>
+      <paginate
+        v-model="page"
+        :pageCount="payload.pageSize"
+        :click-handler="loadposts"
+        :margin-pages="2"
+        :prevText="'Prev'"
+        :nextText="'Next'"
+        :containerClass="'pagination'"></paginate>
     </div>
-    <paginate
-      v-model="page"
-      :pageCount="payload.pageSize"
-      :click-handler="loadposts"
-      :margin-pages="2"
-      :prevText="'Prev'"
-      :nextText="'Next'"
-      :containerClass="'pagination'"></paginate>
     <!-- Sidebar -->
     <section id="sidebar">
       <blog-intro></blog-intro>

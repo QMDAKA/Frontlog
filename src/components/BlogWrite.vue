@@ -13,6 +13,10 @@
         <label class="control-label">Title:</label>
         <input class="form-control" id="title" required v-model="post.title">
       </div>
+      <div class="form-group">
+        <label class="control-label">Abstract:</label>
+        <textarea class="form-control" id="abstract" required v-model="post.abstract"></textarea>
+      </div>
       <div v-for="(tag,index) in post.tags">
         <div class="form-group form-inline">
           <label class="control-label">Tag:</label>
@@ -54,6 +58,7 @@
         post: {
           title: 'hello',
           image: null,
+          abstract: 'hello',
           body: 'Edit Your Content Here',
           tags: ['']
         },
@@ -115,6 +120,7 @@
                   data: fd,
                   params: {
                     title: this.post.title,
+                    abstract: this.post.abstract,
                     body: this.post.body,
                     tags: this.post.tags,
                   }
@@ -140,6 +146,7 @@
                 data: fd,
                 params: {
                   title: this.post.title,
+                  abstract: this.post.abstract,
                   body: this.post.body,
                   tags: this.post.tags,
                   changeImage : changeImage
@@ -175,6 +182,7 @@
           if (result.data.success) {
             this.post.title = result.data.payload.title
             this.post.body = result.data.payload.body
+            this.post.abstract = result.data.payload.abstract
             let tick = _.map(result.data.payload.tags, 'name')
             this.post.tags.splice(0, 1)
             for(let i = 0; i< tick.length; i++){
